@@ -1,0 +1,8 @@
+com\tk\customerOnboarding\model\Members.class
+com\tk\customerOnboarding\controller\CustomerController.class
+com\tk\customerOnboarding\service\CheckFailureCount.class
+com\tk\customerOnboarding\CamundaApplication.class
+com\tk\customerOnboarding\model\TaskDetails.class
+com\tk\customerOnboarding\ProcessConstants.class
+com\tk\customerOnboarding\LoggerDelegate.class
+com\tk\customerOnboarding\config\BeanClass.class
