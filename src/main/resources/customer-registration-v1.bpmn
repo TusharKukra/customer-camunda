@@ -476,3 +476,397 @@ Actor: API Call</bpmn:text>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ybldfz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:collaboration id="Collaboration_0ldkas6">
+    <bpmn:participant id="NDR_NewDeviceRegistrationProcess" name="New Device Registration" processRef="NDR_NewDeviceRegistration" />
+  </bpmn:collaboration>
+  <bpmn:process id="NDR_NewDeviceRegistration" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_0mbevt1">
+      <bpmn:lane id="Lane_10ya7h6" name="Customer">
+        <bpmn:flowNodeRef>NDR_EVT_NewDeviceRegistrationStart</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_TSK_MobileOTPVerification</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_TSK_EmailRegistration</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_TSK_ContactBranch</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_TSK_MPINSetup</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_EVT_NewDeviceRegistrationEnd</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_TSK_EmailOTPVerification</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_TSK_MobileNumberRegistration</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_ACT_ReceivedSMSDownloadedApp</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_1g7k1qp" name="System">
+        <bpmn:flowNodeRef>NDR_SRV_SendMobileOTP</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_GTW_OTPVerified1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_SRV_VerifyCustomerEmail</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_SRV_ExistingEmailCheck</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_GTW_ExistingEmail</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_SRV_VerifyMobileNumber</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_GTW_OTPVerified2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_SRV_VerifyMPIN</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_SRV_SendEmailOTP</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_GTW_NHLCustomer</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NDR_TSK_CheckNHLCustomer</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:sequenceFlow id="Flow_08ez5cl" sourceRef="NDR_EVT_NewDeviceRegistrationStart" targetRef="NDR_ACT_ReceivedSMSDownloadedApp" />
+    <bpmn:sequenceFlow id="NDR_FLW_OTPVerified1No" name="No" sourceRef="NDR_GTW_OTPVerified1" targetRef="NDR_TSK_MobileOTPVerification" />
+    <bpmn:sequenceFlow id="Flow_095ex5r" sourceRef="NDR_TSK_MobileNumberRegistration" targetRef="NDR_TSK_CheckNHLCustomer" />
+    <bpmn:sequenceFlow id="Flow_0dvtqh9" sourceRef="NDR_SRV_SendMobileOTP" targetRef="NDR_TSK_MobileOTPVerification" />
+    <bpmn:sequenceFlow id="NDR_FLW_OTPVerified1Yes" name="Yes" sourceRef="NDR_GTW_OTPVerified1" targetRef="NDR_TSK_EmailRegistration" />
+    <bpmn:sequenceFlow id="NDR_FLW_OTPVerified2No" name="No" sourceRef="NDR_GTW_OTPVerified2" targetRef="NDR_TSK_EmailOTPVerification" />
+    <bpmn:sequenceFlow id="Flow_147suhb" sourceRef="NDR_TSK_EmailRegistration" targetRef="NDR_SRV_ExistingEmailCheck" />
+    <bpmn:sequenceFlow id="Flow_0zir3gy" sourceRef="NDR_TSK_MobileOTPVerification" targetRef="NDR_SRV_VerifyMobileNumber" />
+    <bpmn:sequenceFlow id="Flow_0evc11z" sourceRef="NDR_ACT_ReceivedSMSDownloadedApp" targetRef="NDR_TSK_MobileNumberRegistration" />
+    <bpmn:sequenceFlow id="NDR_FLW_NHLCustomerNo" name="No" sourceRef="NDR_GTW_NHLCustomer" targetRef="NDR_TSK_ContactBranch" />
+    <bpmn:startEvent id="NDR_EVT_NewDeviceRegistrationStart" name="Start">
+      <bpmn:outgoing>Flow_08ez5cl</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="NDR_TSK_MobileOTPVerification" name="Mobile OTP Verification">
+      <bpmn:incoming>Flow_0dvtqh9</bpmn:incoming>
+      <bpmn:incoming>NDR_FLW_OTPVerified1No</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zir3gy</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="NDR_TSK_EmailRegistration" name="Email Registration">
+      <bpmn:incoming>NDR_FLW_OTPVerified1Yes</bpmn:incoming>
+      <bpmn:outgoing>Flow_147suhb</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="NDR_TSK_ContactBranch" name="Contact Branch">
+      <bpmn:incoming>NDR_FLW_NHLCustomerNo</bpmn:incoming>
+      <bpmn:outgoing>Flow_11qriws</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="NDR_TSK_MPINSetup" name="MPIN Setup">
+      <bpmn:incoming>NDR_FLW_OTPVerified2Yes</bpmn:incoming>
+      <bpmn:incoming>NDR_FLW_ExistingEmailYes</bpmn:incoming>
+      <bpmn:outgoing>Flow_12e23yd</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="NDR_EVT_NewDeviceRegistrationEnd">
+      <bpmn:incoming>Flow_0uo0qod</bpmn:incoming>
+      <bpmn:incoming>Flow_11qriws</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="NDR_TSK_EmailOTPVerification" name="Email OTP Verification">
+      <bpmn:incoming>Flow_1su587n</bpmn:incoming>
+      <bpmn:incoming>NDR_FLW_OTPVerified2No</bpmn:incoming>
+      <bpmn:outgoing>Flow_1aiovlk</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_11qriws" sourceRef="NDR_TSK_ContactBranch" targetRef="NDR_EVT_NewDeviceRegistrationEnd" />
+    <bpmn:sequenceFlow id="Flow_1aiovlk" sourceRef="NDR_TSK_EmailOTPVerification" targetRef="NDR_SRV_VerifyCustomerEmail" />
+    <bpmn:sequenceFlow id="NDR_FLW_ExistingEmailYes" name="Yes" sourceRef="NDR_GTW_ExistingEmail" targetRef="NDR_TSK_MPINSetup" />
+    <bpmn:sequenceFlow id="NDR_FLW_OTPVerified2Yes" name="Yes" sourceRef="NDR_GTW_OTPVerified2" targetRef="NDR_TSK_MPINSetup" />
+    <bpmn:sequenceFlow id="Flow_12e23yd" sourceRef="NDR_TSK_MPINSetup" targetRef="NDR_SRV_VerifyMPIN" />
+    <bpmn:sequenceFlow id="Flow_0uo0qod" sourceRef="NDR_SRV_VerifyMPIN" targetRef="NDR_EVT_NewDeviceRegistrationEnd" />
+    <bpmn:sequenceFlow id="Flow_1su587n" sourceRef="NDR_SRV_SendEmailOTP" targetRef="NDR_TSK_EmailOTPVerification" />
+    <bpmn:serviceTask id="NDR_SRV_SendMobileOTP" name="Send Mobile OTP">
+      <bpmn:incoming>NDR_FLW_NHLCustomerYes</bpmn:incoming>
+      <bpmn:outgoing>Flow_0dvtqh9</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="NDR_GTW_OTPVerified1" name="OTP Verified?" default="NDR_FLW_OTPVerified1No">
+      <bpmn:incoming>Flow_1me4r0k</bpmn:incoming>
+      <bpmn:outgoing>NDR_FLW_OTPVerified1No</bpmn:outgoing>
+      <bpmn:outgoing>NDR_FLW_OTPVerified1Yes</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="NDR_SRV_VerifyCustomerEmail" name="Verify Customer Email">
+      <bpmn:incoming>Flow_1aiovlk</bpmn:incoming>
+      <bpmn:outgoing>Flow_0bv4enq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="NDR_SRV_ExistingEmailCheck" name="Existing Email Check">
+      <bpmn:incoming>Flow_147suhb</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wyanp9</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="NDR_GTW_ExistingEmail" name="Existing Email?" default="NDR_FLW_ExistingEmailYes">
+      <bpmn:incoming>Flow_1wyanp9</bpmn:incoming>
+      <bpmn:outgoing>NDR_FLW_ExistingEmailNo</bpmn:outgoing>
+      <bpmn:outgoing>NDR_FLW_ExistingEmailYes</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="NDR_SRV_VerifyMobileNumber" name="Verify Mobile Number">
+      <bpmn:incoming>Flow_0zir3gy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1me4r0k</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="NDR_GTW_OTPVerified2" name="OTP Verified?" default="NDR_FLW_OTPVerified2No">
+      <bpmn:incoming>Flow_0bv4enq</bpmn:incoming>
+      <bpmn:outgoing>NDR_FLW_OTPVerified2No</bpmn:outgoing>
+      <bpmn:outgoing>NDR_FLW_OTPVerified2Yes</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="NDR_SRV_VerifyMPIN" name="Verify MPIN">
+      <bpmn:incoming>Flow_12e23yd</bpmn:incoming>
+      <bpmn:outgoing>Flow_0uo0qod</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="NDR_SRV_SendEmailOTP" name="Send Email OTP">
+      <bpmn:incoming>NDR_FLW_ExistingEmailNo</bpmn:incoming>
+      <bpmn:outgoing>Flow_1su587n</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0e8n4ub" sourceRef="NDR_TSK_CheckNHLCustomer" targetRef="NDR_GTW_NHLCustomer" />
+    <bpmn:sequenceFlow id="NDR_FLW_NHLCustomerYes" name="Yes" sourceRef="NDR_GTW_NHLCustomer" targetRef="NDR_SRV_SendMobileOTP" />
+    <bpmn:sequenceFlow id="Flow_1me4r0k" sourceRef="NDR_SRV_VerifyMobileNumber" targetRef="NDR_GTW_OTPVerified1" />
+    <bpmn:sequenceFlow id="Flow_0bv4enq" sourceRef="NDR_SRV_VerifyCustomerEmail" targetRef="NDR_GTW_OTPVerified2" />
+    <bpmn:sequenceFlow id="Flow_1wyanp9" sourceRef="NDR_SRV_ExistingEmailCheck" targetRef="NDR_GTW_ExistingEmail" />
+    <bpmn:sequenceFlow id="NDR_FLW_ExistingEmailNo" name="No" sourceRef="NDR_GTW_ExistingEmail" targetRef="NDR_SRV_SendEmailOTP" />
+    <bpmn:exclusiveGateway id="NDR_GTW_NHLCustomer" name="NHL Customer?" default="NDR_FLW_NHLCustomerNo">
+      <bpmn:incoming>Flow_0e8n4ub</bpmn:incoming>
+      <bpmn:outgoing>NDR_FLW_NHLCustomerYes</bpmn:outgoing>
+      <bpmn:outgoing>NDR_FLW_NHLCustomerNo</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="NDR_TSK_MobileNumberRegistration" name="Mobile Number Registration">
+      <bpmn:incoming>Flow_0evc11z</bpmn:incoming>
+      <bpmn:outgoing>Flow_095ex5r</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:task id="NDR_ACT_ReceivedSMSDownloadedApp" name="Received SMS &#38; Downloaded App">
+      <bpmn:incoming>Flow_08ez5cl</bpmn:incoming>
+      <bpmn:outgoing>Flow_0evc11z</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:userTask id="NDR_TSK_CheckNHLCustomer" name="Check if NHL Customer">
+      <bpmn:incoming>Flow_095ex5r</bpmn:incoming>
+      <bpmn:outgoing>Flow_0e8n4ub</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0ldkas6">
+      <bpmndi:BPMNShape id="Participant_180et3a_di" bpmnElement="NDR_NewDeviceRegistrationProcess" isHorizontal="true">
+        <dc:Bounds x="159" y="83" width="3291" height="987" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1g7k1qp_di" bpmnElement="Lane_1g7k1qp" isHorizontal="true">
+        <dc:Bounds x="189" y="570" width="3261" height="500" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_10ya7h6_di" bpmnElement="Lane_10ya7h6" isHorizontal="true">
+        <dc:Bounds x="189" y="83" width="3261" height="487" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0pxa04y_di" bpmnElement="NDR_FLW_ExistingEmailNo">
+        <di:waypoint x="1905" y="750" />
+        <di:waypoint x="1970" y="750" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1920" y="732" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wyanp9_di" bpmnElement="Flow_1wyanp9">
+        <di:waypoint x="1800" y="750" />
+        <di:waypoint x="1855" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bv4enq_di" bpmnElement="Flow_0bv4enq">
+        <di:waypoint x="2410" y="750" />
+        <di:waypoint x="2455" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1me4r0k_di" bpmnElement="Flow_1me4r0k">
+        <di:waypoint x="1335" y="750" />
+        <di:waypoint x="1385" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fhuqce_di" bpmnElement="NDR_FLW_NHLCustomerYes">
+        <di:waypoint x="815" y="750" />
+        <di:waypoint x="900" y="750" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="834" y="732" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0e8n4ub_di" bpmnElement="Flow_0e8n4ub">
+        <di:waypoint x="720" y="750" />
+        <di:waypoint x="765" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1su587n_di" bpmnElement="Flow_1su587n">
+        <di:waypoint x="2070" y="750" />
+        <di:waypoint x="2105" y="750" />
+        <di:waypoint x="2105" y="363" />
+        <di:waypoint x="2140" y="363" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0uo0qod_di" bpmnElement="Flow_0uo0qod">
+        <di:waypoint x="2910" y="750" />
+        <di:waypoint x="2970" y="750" />
+        <di:waypoint x="2970" y="363" />
+        <di:waypoint x="3142" y="363" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12e23yd_di" bpmnElement="Flow_12e23yd">
+        <di:waypoint x="2690" y="363" />
+        <di:waypoint x="2715" y="363" />
+        <di:waypoint x="2715" y="750" />
+        <di:waypoint x="2810" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ucbuq1_di" bpmnElement="NDR_FLW_OTPVerified2Yes">
+        <di:waypoint x="2505" y="750" />
+        <di:waypoint x="2530" y="750" />
+        <di:waypoint x="2530" y="363" />
+        <di:waypoint x="2590" y="363" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2501" y="723" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_120m9qn_di" bpmnElement="NDR_FLW_ExistingEmailYes">
+        <di:waypoint x="1880" y="775" />
+        <di:waypoint x="1880" y="820" />
+        <di:waypoint x="2640" y="820" />
+        <di:waypoint x="2640" y="403" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1881" y="793" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1aiovlk_di" bpmnElement="Flow_1aiovlk">
+        <di:waypoint x="2240" y="363" />
+        <di:waypoint x="2275" y="363" />
+        <di:waypoint x="2275" y="750" />
+        <di:waypoint x="2310" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11qriws_di" bpmnElement="Flow_11qriws">
+        <di:waypoint x="3160" y="430" />
+        <di:waypoint x="3160" y="381" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1a6teva_di" bpmnElement="NDR_FLW_NHLCustomerNo">
+        <di:waypoint x="790" y="775" />
+        <di:waypoint x="790" y="890" />
+        <di:waypoint x="3160" y="890" />
+        <di:waypoint x="3160" y="510" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="802" y="803" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0evc11z_di" bpmnElement="Flow_0evc11z">
+        <di:waypoint x="410" y="363" />
+        <di:waypoint x="460" y="363" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zir3gy_di" bpmnElement="Flow_0zir3gy">
+        <di:waypoint x="1170" y="363" />
+        <di:waypoint x="1190" y="363" />
+        <di:waypoint x="1190" y="750" />
+        <di:waypoint x="1235" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_147suhb_di" bpmnElement="Flow_147suhb">
+        <di:waypoint x="1620" y="363" />
+        <di:waypoint x="1660" y="363" />
+        <di:waypoint x="1660" y="750" />
+        <di:waypoint x="1700" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12b2k9p_di" bpmnElement="NDR_FLW_OTPVerified2No">
+        <di:waypoint x="2480" y="725" />
+        <di:waypoint x="2480" y="273" />
+        <di:waypoint x="2190" y="273" />
+        <di:waypoint x="2190" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2452" y="683" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0u25t2c_di" bpmnElement="NDR_FLW_OTPVerified1Yes">
+        <di:waypoint x="1435" y="750" />
+        <di:waypoint x="1460" y="750" />
+        <di:waypoint x="1460" y="363" />
+        <di:waypoint x="1520" y="363" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1471" y="723" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dvtqh9_di" bpmnElement="Flow_0dvtqh9">
+        <di:waypoint x="1000" y="750" />
+        <di:waypoint x="1035" y="750" />
+        <di:waypoint x="1035" y="363" />
+        <di:waypoint x="1070" y="363" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_095ex5r_di" bpmnElement="Flow_095ex5r">
+        <di:waypoint x="560" y="363" />
+        <di:waypoint x="590" y="363" />
+        <di:waypoint x="590" y="750" />
+        <di:waypoint x="620" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10pfr1o_di" bpmnElement="NDR_FLW_OTPVerified1No">
+        <di:waypoint x="1410" y="725" />
+        <di:waypoint x="1410" y="260" />
+        <di:waypoint x="1120" y="260" />
+        <di:waypoint x="1120" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1392" y="683" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08ez5cl_di" bpmnElement="Flow_08ez5cl">
+        <di:waypoint x="258" y="363" />
+        <di:waypoint x="310" y="363" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="NDR_EVT_NewDeviceRegistrationStart">
+        <dc:Bounds x="222" y="345" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="229" y="388" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08nn70v_di" bpmnElement="NDR_TSK_MobileOTPVerification">
+        <dc:Bounds x="1070" y="323" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vgar2s_di" bpmnElement="NDR_TSK_EmailRegistration">
+        <dc:Bounds x="1520" y="323" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_133af5r_di" bpmnElement="NDR_TSK_ContactBranch">
+        <dc:Bounds x="3110" y="430" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0myhlwe_di" bpmnElement="NDR_TSK_MPINSetup">
+        <dc:Bounds x="2590" y="323" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_02xdhoy_di" bpmnElement="NDR_EVT_NewDeviceRegistrationEnd">
+        <dc:Bounds x="3142" y="345" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17a7jg3_di" bpmnElement="NDR_TSK_EmailOTPVerification">
+        <dc:Bounds x="2140" y="323" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1fljij5_di" bpmnElement="NDR_SRV_SendMobileOTP">
+        <dc:Bounds x="900" y="710" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1i4aqha_di" bpmnElement="NDR_GTW_OTPVerified1" isMarkerVisible="true">
+        <dc:Bounds x="1385" y="725" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1375" y="785" width="69" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17u86wo_di" bpmnElement="NDR_SRV_VerifyCustomerEmail">
+        <dc:Bounds x="2310" y="710" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qfxitc_di" bpmnElement="NDR_SRV_ExistingEmailCheck">
+        <dc:Bounds x="1700" y="710" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0y6iytk_di" bpmnElement="NDR_GTW_ExistingEmail" isMarkerVisible="true">
+        <dc:Bounds x="1855" y="725" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1842" y="701" width="76" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1il1s96_di" bpmnElement="NDR_SRV_VerifyMobileNumber">
+        <dc:Bounds x="1235" y="710" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1rezvi1_di" bpmnElement="NDR_GTW_OTPVerified2" isMarkerVisible="true">
+        <dc:Bounds x="2455" y="725" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2465" y="785" width="69" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1i101vy_di" bpmnElement="NDR_SRV_VerifyMPIN">
+        <dc:Bounds x="2810" y="710" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1rhrkxi_di" bpmnElement="NDR_SRV_SendEmailOTP">
+        <dc:Bounds x="1970" y="710" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_00qujqk_di" bpmnElement="NDR_GTW_NHLCustomer" isMarkerVisible="true">
+        <dc:Bounds x="765" y="725" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="751" y="701" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04y4siy_di" bpmnElement="NDR_TSK_MobileNumberRegistration">
+        <dc:Bounds x="460" y="323" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gkb51z_di" bpmnElement="NDR_ACT_ReceivedSMSDownloadedApp">
+        <dc:Bounds x="310" y="323" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1v5j624_di" bpmnElement="NDR_TSK_CheckNHLCustomer">
+        <dc:Bounds x="620" y="710" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
