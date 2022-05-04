@@ -870,3 +870,907 @@ Actor: API Call</bpmn:text>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
+
+
+
+<!--- Customer Onboarding v-6 -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0c8dtjx" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:collaboration id="Collaboration_1gg8l96">
+    <bpmn:participant id="COB_CustomerOnboarding" name="Customer Onboarding" processRef="COB_CustomerOnboardingProcess" />
+  </bpmn:collaboration>
+  <bpmn:process id="COB_CustomerOnboardingProcess" name="Customer Onboarding" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_17omnlx">
+      <bpmn:lane id="Lane_0tthq5s" name="System">
+        <bpmn:flowNodeRef>COB_SRV_FSKScreening</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SRV_Sanctions</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SUB_AccountActivationWorkflow</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SRV_LivelinessVerify</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SRV_NFCVerify</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SRV_OCRScanVerify</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_EVT_JourneyCompletedEnd</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SUB_AramexCourier</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SRV_T24AccActivationCompleted</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0rr2d7y</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_01gslq6</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1e55ldb</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_1tyqxvx" name="Customer">
+        <bpmn:flowNodeRef>COB_ACT_CaptureCustomerDetails</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_EVT_CustomerOnboardingStart</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_ACT_CaptureLivelinessStatus</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_GTW_NFCPass</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_TSK_LivelinessCheck</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_TSK_EIDNFC</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_GTW_Gateway</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SRV_DocumentSaveinDMS</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_TSK_MortgageContractLoanAgreementSitePlan</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_TSK_FABSalarySIOForm</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_GTW_FabAccount</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_TSK_CaptureBankDetails</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SNDTSK_StartAccountRegistration</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_ACT_CongratulationsScreen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_ACT_ContactBranch</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_TSK_NonFABSalaryDDAForm</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_ACT_DDAFormSent</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_TSK_EIDOCRScan</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SRV_NewDeviceReg</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_EVT_WaitingDeviceReg</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_EVT_SendSMS</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_GTW_ParallelGateway</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_GTW_RetryCount</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_TSK_CongratulationsScreen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_GTW_Exceptions</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SNDTSK_SMSSentForFailure</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SRV_T24AccountOpening</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0cuzgpz</bpmn:flowNodeRef>
+        <bpmn:childLaneSet id="LaneSet_07c2tsl" />
+      </bpmn:lane>
+      <bpmn:lane id="Lane_022usp6" name="Branch Team">
+        <bpmn:flowNodeRef>COB_TSK_UpdateMissingDetails</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_EVT_WaitingToTriggerByBranch</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_GTW_TrueHit</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SUB_EKYCFailure</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_SUB_RegistrationByBranch</bpmn:flowNodeRef>
+        <bpmn:childLaneSet id="LaneSet_0wmtl6x">
+          <bpmn:lane id="Lane_0j7nfm0" name="CSO">
+            <bpmn:flowNodeRef>COB_TSK_UpdateMissingDetails</bpmn:flowNodeRef>
+            <bpmn:flowNodeRef>COB_EVT_WaitingToTriggerByBranch</bpmn:flowNodeRef>
+            <bpmn:flowNodeRef>COB_GTW_TrueHit</bpmn:flowNodeRef>
+            <bpmn:flowNodeRef>COB_SUB_EKYCFailure</bpmn:flowNodeRef>
+            <bpmn:flowNodeRef>COB_SUB_RegistrationByBranch</bpmn:flowNodeRef>
+          </bpmn:lane>
+          <bpmn:lane id="Lane_0h6oj7z" name="Team" />
+        </bpmn:childLaneSet>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_19qmjf4" name="AMO Team">
+        <bpmn:flowNodeRef>COB_GTW_Clearance</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>COB_TSK_VerifyCustomerDetails</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:sequenceFlow id="Flow_0nuyh7u" sourceRef="COB_SRV_FSKScreening" targetRef="COB_ACT_CaptureCustomerDetails" />
+    <bpmn:sequenceFlow id="Flow_1aajd83" sourceRef="COB_ACT_CaptureLivelinessStatus" targetRef="COB_SRV_Sanctions" />
+    <bpmn:sequenceFlow id="Flow_123u8re" sourceRef="COB_EVT_CustomerOnboardingStart" targetRef="COB_EVT_SendSMS" />
+    <bpmn:sequenceFlow id="Flow_0rbep4c" sourceRef="COB_TSK_EIDOCRScan" targetRef="COB_SRV_OCRScanVerify" />
+    <bpmn:sequenceFlow id="Flow_1pioe6h" sourceRef="Event_0rr2d7y" targetRef="COB_GTW_RetryCount" />
+    <bpmn:sequenceFlow id="Flow_11qd6iw" sourceRef="COB_SRV_OCRScanVerify" targetRef="COB_TSK_EIDNFC" />
+    <bpmn:sequenceFlow id="Flow_04tb2d6" sourceRef="COB_TSK_EIDNFC" targetRef="COB_SRV_NFCVerify" />
+    <bpmn:sequenceFlow id="Flow_0hrv2nc" sourceRef="COB_SRV_NFCVerify" targetRef="COB_GTW_NFCPass" />
+    <bpmn:sequenceFlow id="Flow_1bt9co0" sourceRef="COB_TSK_LivelinessCheck" targetRef="COB_SRV_LivelinessVerify" />
+    <bpmn:sequenceFlow id="Flow_1u7uwtt" sourceRef="COB_SRV_LivelinessVerify" targetRef="COB_ACT_CaptureLivelinessStatus" />
+    <bpmn:sequenceFlow id="Flow_0iuslsx" sourceRef="COB_SRV_Sanctions" targetRef="COB_SRV_FSKScreening" />
+    <bpmn:sequenceFlow id="Flow_1ur7cej" sourceRef="COB_EVT_WaitingToTriggerByBranch" targetRef="COB_SUB_RegistrationByBranch" />
+    <bpmn:sequenceFlow id="Flow_00crytw" sourceRef="COB_GTW_ParallelGateway" targetRef="COB_EVT_WaitingToTriggerByBranch" />
+    <bpmn:sequenceFlow id="Flow_1p3dha4" sourceRef="COB_SUB_RegistrationByBranch" targetRef="COB_GTW_Gateway" />
+    <bpmn:sequenceFlow id="Flow_17sn8nk" name="No" sourceRef="COB_GTW_NFCPass" targetRef="COB_ACT_ContactBranch" />
+    <bpmn:sequenceFlow id="Flow_1jhzvln" name="No" sourceRef="COB_GTW_Exceptions" targetRef="COB_TSK_CongratulationsScreen" />
+    <bpmn:sequenceFlow id="Flow_0r0hry4" sourceRef="COB_TSK_CongratulationsScreen" targetRef="COB_SUB_AccountActivationWorkflow" />
+    <bpmn:sequenceFlow id="Flow_0y29wqx" sourceRef="COB_SUB_AccountActivationWorkflow" targetRef="COB_SNDTSK_StartAccountRegistration" />
+    <bpmn:sequenceFlow id="Flow_1n458lk" sourceRef="COB_SRV_T24AccountOpening" targetRef="COB_GTW_Exceptions" />
+    <bpmn:sequenceFlow id="Flow_0o6yjx3" sourceRef="COB_SNDTSK_StartAccountRegistration" targetRef="COB_TSK_CaptureBankDetails" />
+    <bpmn:sequenceFlow id="Flow_0863p2k" sourceRef="COB_TSK_CaptureBankDetails" targetRef="COB_GTW_FabAccount" />
+    <bpmn:sequenceFlow id="Flow_0blvsk0" name="Yes" sourceRef="COB_GTW_FabAccount" targetRef="COB_TSK_FABSalarySIOForm" />
+    <bpmn:sequenceFlow id="Flow_157pa4c" name="No" sourceRef="COB_GTW_FabAccount" targetRef="COB_TSK_NonFABSalaryDDAForm" />
+    <bpmn:sequenceFlow id="Flow_1pkgzge" sourceRef="COB_TSK_NonFABSalaryDDAForm" targetRef="COB_ACT_DDAFormSent" />
+    <bpmn:sequenceFlow id="Flow_1wcuoxa" sourceRef="COB_TSK_FABSalarySIOForm" targetRef="COB_TSK_MortgageContractLoanAgreementSitePlan" />
+    <bpmn:sequenceFlow id="Flow_0z46kqz" sourceRef="COB_TSK_MortgageContractLoanAgreementSitePlan" targetRef="COB_SRV_DocumentSaveinDMS" />
+    <bpmn:sequenceFlow id="Flow_0pwsx0d" sourceRef="COB_SRV_DocumentSaveinDMS" targetRef="COB_ACT_CongratulationsScreen" />
+    <bpmn:sequenceFlow id="Flow_0t5i8r2" sourceRef="COB_ACT_CongratulationsScreen" targetRef="COB_GTW_Gateway" />
+    <bpmn:sequenceFlow id="Flow_0346nu0" name="Yes" sourceRef="COB_GTW_Exceptions" targetRef="COB_SNDTSK_SMSSentForFailure" />
+    <bpmn:sequenceFlow id="Flow_0z67zcd" sourceRef="COB_TSK_UpdateMissingDetails" targetRef="COB_TSK_VerifyCustomerDetails" />
+    <bpmn:sequenceFlow id="Flow_1sn5kv9" sourceRef="COB_TSK_VerifyCustomerDetails" targetRef="COB_GTW_Clearance" />
+    <bpmn:sequenceFlow id="Flow_1b8izp7" sourceRef="COB_GTW_Gateway" targetRef="COB_TSK_VerifyCustomerDetails" />
+    <bpmn:sequenceFlow id="Flow_1rmcprf" sourceRef="COB_SRV_NewDeviceReg" targetRef="COB_TSK_EIDOCRScan" />
+    <bpmn:sequenceFlow id="Flow_19a750f" name="Yes" sourceRef="COB_GTW_NFCPass" targetRef="COB_TSK_LivelinessCheck" />
+    <bpmn:sequenceFlow id="Flow_1l5w82g" sourceRef="COB_ACT_CaptureCustomerDetails" targetRef="Activity_0cuzgpz" />
+    <bpmn:sequenceFlow id="Flow_0i73ire" sourceRef="COB_GTW_ParallelGateway" targetRef="COB_EVT_WaitingDeviceReg" />
+    <bpmn:sequenceFlow id="Flow_07n8aps" name="Yes" sourceRef="COB_GTW_Clearance" targetRef="COB_SRV_T24AccActivationCompleted" />
+    <bpmn:sequenceFlow id="Flow_1l9ulyn" name="No" sourceRef="COB_GTW_Clearance" targetRef="COB_TSK_UpdateMissingDetails" />
+    <bpmn:sequenceFlow id="Flow_1k0012p" name="NFC Failure" sourceRef="COB_ACT_ContactBranch" targetRef="COB_EVT_WaitingToTriggerByBranch" />
+    <bpmn:sequenceFlow id="Flow_198cgst" sourceRef="COB_ACT_DDAFormSent" targetRef="COB_TSK_MortgageContractLoanAgreementSitePlan" />
+    <bpmn:sequenceFlow id="Flow_0veesb2" sourceRef="COB_EVT_WaitingDeviceReg" targetRef="COB_SRV_NewDeviceReg" />
+    <bpmn:sequenceFlow id="Flow_106h9ph" sourceRef="COB_EVT_SendSMS" targetRef="COB_GTW_ParallelGateway" />
+    <bpmn:sequenceFlow id="Flow_0laxc4c" name="Less Than Count" sourceRef="COB_GTW_RetryCount" targetRef="COB_TSK_EIDOCRScan">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1u2fqn3" sourceRef="COB_GTW_RetryCount" targetRef="COB_EVT_WaitingToTriggerByBranch" />
+    <bpmn:sequenceFlow id="Flow_0hsjq5e" sourceRef="Event_01gslq6" targetRef="COB_SUB_EKYCFailure" />
+    <bpmn:sequenceFlow id="Flow_1abcp4e" name="Yes" sourceRef="COB_GTW_TrueHit" targetRef="COB_EVT_WaitingToTriggerByBranch" />
+    <bpmn:sequenceFlow id="Flow_134i5w3" sourceRef="COB_SNDTSK_SMSSentForFailure" targetRef="COB_EVT_WaitingToTriggerByBranch" />
+    <bpmn:sequenceFlow id="Flow_1l3an9x" sourceRef="COB_SUB_EKYCFailure" targetRef="COB_GTW_TrueHit" />
+    <bpmn:sequenceFlow id="Flow_1f3hurq" sourceRef="Event_1e55ldb" targetRef="COB_SUB_EKYCFailure" />
+    <bpmn:sequenceFlow id="Flow_0qh6lv5" name="No" sourceRef="COB_GTW_TrueHit" targetRef="COB_ACT_CaptureCustomerDetails" />
+    <bpmn:sequenceFlow id="Flow_08gq3zn" sourceRef="Activity_0cuzgpz" targetRef="COB_SRV_T24AccountOpening" />
+    <bpmn:sequenceFlow id="Flow_0ikcu6y" sourceRef="COB_SUB_AramexCourier" targetRef="COB_EVT_JourneyCompletedEnd" />
+    <bpmn:sequenceFlow id="Flow_0s8gbyw" sourceRef="COB_SRV_T24AccActivationCompleted" targetRef="COB_SUB_AramexCourier" />
+    <bpmn:boundaryEvent id="Event_1e55ldb" attachedToRef="COB_SRV_FSKScreening">
+      <bpmn:outgoing>Flow_1f3hurq</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1uvvy6s" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_01gslq6" attachedToRef="COB_SRV_Sanctions">
+      <bpmn:outgoing>Flow_0hsjq5e</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_144zcwn" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_0rr2d7y" attachedToRef="COB_SRV_OCRScanVerify">
+      <bpmn:outgoing>Flow_1pioe6h</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1osk8yc" />
+    </bpmn:boundaryEvent>
+    <bpmn:serviceTask id="COB_SRV_T24AccActivationCompleted" name="T24 a/c activation completed + risk rating completed">
+      <bpmn:incoming>Flow_07n8aps</bpmn:incoming>
+      <bpmn:outgoing>Flow_0s8gbyw</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:callActivity id="COB_SUB_AramexCourier" name="ARAMEX Courier">
+      <bpmn:incoming>Flow_0s8gbyw</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ikcu6y</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:endEvent id="COB_EVT_JourneyCompletedEnd" name="Journey Completed">
+      <bpmn:incoming>Flow_0ikcu6y</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_0ilueo7" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0cuzgpz" name="Customer &#38; T24 Account De-DUP Check">
+      <bpmn:incoming>Flow_1l5w82g</bpmn:incoming>
+      <bpmn:outgoing>Flow_08gq3zn</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="COB_SRV_T24AccountOpening" name="T24 Account Opening">
+      <bpmn:incoming>Flow_08gq3zn</bpmn:incoming>
+      <bpmn:outgoing>Flow_1n458lk</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="COB_SNDTSK_SMSSentForFailure" name="SMS sent for Failure">
+      <bpmn:incoming>Flow_0346nu0</bpmn:incoming>
+      <bpmn:outgoing>Flow_134i5w3</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="COB_GTW_Exceptions" name="Exceptions?" default="Flow_1jhzvln">
+      <bpmn:incoming>Flow_1n458lk</bpmn:incoming>
+      <bpmn:outgoing>Flow_0346nu0</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1jhzvln</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="COB_TSK_CongratulationsScreen" name="Congratulations Screen">
+      <bpmn:incoming>Flow_1jhzvln</bpmn:incoming>
+      <bpmn:outgoing>Flow_0r0hry4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:callActivity id="COB_SUB_RegistrationByBranch" name="Registration By Branch">
+      <bpmn:incoming>Flow_1ur7cej</bpmn:incoming>
+      <bpmn:outgoing>Flow_1p3dha4</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:callActivity id="COB_SUB_EKYCFailure" name="E-KYC Failure">
+      <bpmn:incoming>Flow_0hsjq5e</bpmn:incoming>
+      <bpmn:incoming>Flow_1f3hurq</bpmn:incoming>
+      <bpmn:outgoing>Flow_1l3an9x</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:exclusiveGateway id="COB_GTW_TrueHit" name="TRUE HIT?" default="Flow_0qh6lv5">
+      <bpmn:incoming>Flow_1l3an9x</bpmn:incoming>
+      <bpmn:outgoing>Flow_1abcp4e</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0qh6lv5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="COB_GTW_RetryCount" name="Retry Count?" default="Flow_1u2fqn3">
+      <bpmn:incoming>Flow_1pioe6h</bpmn:incoming>
+      <bpmn:outgoing>Flow_0laxc4c</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1u2fqn3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:parallelGateway id="COB_GTW_ParallelGateway">
+      <bpmn:incoming>Flow_106h9ph</bpmn:incoming>
+      <bpmn:outgoing>Flow_0i73ire</bpmn:outgoing>
+      <bpmn:outgoing>Flow_00crytw</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:intermediateCatchEvent id="COB_EVT_SendSMS" name="Send SMS">
+      <bpmn:incoming>Flow_123u8re</bpmn:incoming>
+      <bpmn:outgoing>Flow_106h9ph</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0taurq1" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="COB_EVT_WaitingDeviceReg" name="Waiting for Device registration">
+      <bpmn:incoming>Flow_0i73ire</bpmn:incoming>
+      <bpmn:outgoing>Flow_0veesb2</bpmn:outgoing>
+      <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_1hktwpu">
+        <bpmn:condition xsi:type="bpmn:tFormalExpression" />
+      </bpmn:conditionalEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="COB_SRV_NewDeviceReg" name="New Device Registered">
+      <bpmn:incoming>Flow_0veesb2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rmcprf</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="COB_TSK_EIDOCRScan" name="EID OCR Scan">
+      <bpmn:incoming>Flow_1rmcprf</bpmn:incoming>
+      <bpmn:incoming>Flow_0laxc4c</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rbep4c</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:task id="COB_ACT_DDAFormSent" name="DDA Form Sent for Printing &#38; Approval">
+      <bpmn:incoming>Flow_1pkgzge</bpmn:incoming>
+      <bpmn:outgoing>Flow_198cgst</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:userTask id="COB_TSK_NonFABSalaryDDAForm" name="Non-FAB Salary DDA Form">
+      <bpmn:incoming>Flow_157pa4c</bpmn:incoming>
+      <bpmn:outgoing>Flow_1pkgzge</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:intermediateCatchEvent id="COB_EVT_WaitingToTriggerByBranch" name="Waiting to trigger By Branch">
+      <bpmn:incoming>Flow_00crytw</bpmn:incoming>
+      <bpmn:incoming>Flow_1k0012p</bpmn:incoming>
+      <bpmn:incoming>Flow_1u2fqn3</bpmn:incoming>
+      <bpmn:incoming>Flow_1abcp4e</bpmn:incoming>
+      <bpmn:incoming>Flow_134i5w3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ur7cej</bpmn:outgoing>
+      <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_1c0lkuh">
+        <bpmn:condition xsi:type="bpmn:tFormalExpression" />
+      </bpmn:conditionalEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:userTask id="COB_TSK_UpdateMissingDetails" name="Update Missing Details">
+      <bpmn:incoming>Flow_1l9ulyn</bpmn:incoming>
+      <bpmn:outgoing>Flow_0z67zcd</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="COB_TSK_VerifyCustomerDetails" name="Verify Customer Details">
+      <bpmn:incoming>Flow_0z67zcd</bpmn:incoming>
+      <bpmn:incoming>Flow_1b8izp7</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sn5kv9</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:task id="COB_ACT_ContactBranch" name="Contact Branch to resume Loan Application">
+      <bpmn:incoming>Flow_17sn8nk</bpmn:incoming>
+      <bpmn:outgoing>Flow_1k0012p</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="COB_ACT_CongratulationsScreen" name="Congratulations Screen">
+      <bpmn:incoming>Flow_0pwsx0d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0t5i8r2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:serviceTask id="COB_SRV_OCRScanVerify" name="OCR Scan Verify">
+      <bpmn:incoming>Flow_0rbep4c</bpmn:incoming>
+      <bpmn:outgoing>Flow_11qd6iw</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="COB_SRV_NFCVerify" name="NFC Verify">
+      <bpmn:incoming>Flow_04tb2d6</bpmn:incoming>
+      <bpmn:outgoing>Flow_0hrv2nc</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="COB_SRV_LivelinessVerify" name="Liveliness Verify">
+      <bpmn:incoming>Flow_1bt9co0</bpmn:incoming>
+      <bpmn:outgoing>Flow_1u7uwtt</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:callActivity id="COB_SUB_AccountActivationWorkflow" name="Account Activation Workflow">
+      <bpmn:incoming>Flow_0r0hry4</bpmn:incoming>
+      <bpmn:outgoing>Flow_0y29wqx</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sendTask id="COB_SNDTSK_StartAccountRegistration" name="Start Account Registration enabled">
+      <bpmn:incoming>Flow_0y29wqx</bpmn:incoming>
+      <bpmn:outgoing>Flow_0o6yjx3</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="COB_TSK_CaptureBankDetails" name="Capture Bank Details">
+      <bpmn:incoming>Flow_0o6yjx3</bpmn:incoming>
+      <bpmn:outgoing>Flow_0863p2k</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="COB_GTW_FabAccount" name="FAB Account?" default="Flow_157pa4c">
+      <bpmn:incoming>Flow_0863p2k</bpmn:incoming>
+      <bpmn:outgoing>Flow_0blvsk0</bpmn:outgoing>
+      <bpmn:outgoing>Flow_157pa4c</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="COB_TSK_FABSalarySIOForm" name="FAB Salary SIO Form">
+      <bpmn:incoming>Flow_0blvsk0</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wcuoxa</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="COB_TSK_MortgageContractLoanAgreementSitePlan" name="Mortgage Contract, Loan Agreement, Site Plan">
+      <bpmn:incoming>Flow_1wcuoxa</bpmn:incoming>
+      <bpmn:incoming>Flow_198cgst</bpmn:incoming>
+      <bpmn:outgoing>Flow_0z46kqz</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="COB_SRV_DocumentSaveinDMS" name="Document Save in DMS">
+      <bpmn:incoming>Flow_0z46kqz</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pwsx0d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="COB_GTW_Gateway">
+      <bpmn:incoming>Flow_0t5i8r2</bpmn:incoming>
+      <bpmn:incoming>Flow_1p3dha4</bpmn:incoming>
+      <bpmn:outgoing>Flow_1b8izp7</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="COB_TSK_EIDNFC" name="EID NFC">
+      <bpmn:incoming>Flow_11qd6iw</bpmn:incoming>
+      <bpmn:outgoing>Flow_04tb2d6</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="COB_TSK_LivelinessCheck" name="Liveliness Check">
+      <bpmn:incoming>Flow_19a750f</bpmn:incoming>
+      <bpmn:outgoing>Flow_1bt9co0</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="COB_GTW_NFCPass" name="NFC Pass?" default="Flow_17sn8nk">
+      <bpmn:incoming>Flow_0hrv2nc</bpmn:incoming>
+      <bpmn:outgoing>Flow_19a750f</bpmn:outgoing>
+      <bpmn:outgoing>Flow_17sn8nk</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="COB_ACT_CaptureLivelinessStatus" name="Capture Liveliness Status">
+      <bpmn:incoming>Flow_1u7uwtt</bpmn:incoming>
+      <bpmn:outgoing>Flow_1aajd83</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="COB_GTW_Clearance" name="Clearance?" default="Flow_1l9ulyn">
+      <bpmn:incoming>Flow_1sn5kv9</bpmn:incoming>
+      <bpmn:outgoing>Flow_07n8aps</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1l9ulyn</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:startEvent id="COB_EVT_CustomerOnboardingStart" name="Start">
+      <bpmn:outgoing>Flow_123u8re</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:callActivity id="COB_ACT_CaptureCustomerDetails" name="Capture Customer Details">
+      <bpmn:incoming>Flow_0nuyh7u</bpmn:incoming>
+      <bpmn:incoming>Flow_0qh6lv5</bpmn:incoming>
+      <bpmn:outgoing>Flow_1l5w82g</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:serviceTask id="COB_SRV_Sanctions" name="Sanctions">
+      <bpmn:incoming>Flow_1aajd83</bpmn:incoming>
+      <bpmn:outgoing>Flow_0iuslsx</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="COB_SRV_FSKScreening" name="FSK Screening">
+      <bpmn:incoming>Flow_0iuslsx</bpmn:incoming>
+      <bpmn:outgoing>Flow_0nuyh7u</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:textAnnotation id="TextAnnotation_1ay4xgd">
+      <bpmn:text>ARAMEX collects the cheques from customer/ branch CSO (returned cheques)</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_08ghkv8">
+      <bpmn:text>Send Journey Completion SMS &amp; Email</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_17pdc1s">
+      <bpmn:text>Receive Journey Completion SMS &amp; Email</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_02ezatn">
+      <bpmn:text>TBD with BA for exit flow "G"</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_0glop4h">
+      <bpmn:text>*In case of sanctions HIT no a/c will be opened
+-In case of screening/ID&amp;V HIT inactive/dormant a/c will be opened</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_03lnkoi">
+      <bpmn:text>If Liveliness failure, Exception is YES</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1400xav" sourceRef="COB_SRV_T24AccActivationCompleted" targetRef="TextAnnotation_17pdc1s" />
+    <bpmn:association id="Association_0bl28xh" sourceRef="COB_SRV_T24AccActivationCompleted" targetRef="TextAnnotation_08ghkv8" />
+    <bpmn:association id="Association_02iaz2u" sourceRef="COB_SUB_AramexCourier" targetRef="TextAnnotation_1ay4xgd" />
+    <bpmn:association id="Association_1b34imt" sourceRef="COB_SRV_T24AccountOpening" targetRef="TextAnnotation_0glop4h" />
+    <bpmn:association id="Association_0kepdw1" sourceRef="COB_GTW_Exceptions" targetRef="TextAnnotation_03lnkoi" />
+    <bpmn:association id="Association_18vm2st" sourceRef="COB_SUB_EKYCFailure" targetRef="TextAnnotation_02ezatn" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1gg8l96">
+      <bpmndi:BPMNShape id="Participant_1d9774d_di" bpmnElement="COB_CustomerOnboarding" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="5770" height="1730" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_19qmjf4_di" bpmnElement="Lane_19qmjf4" isHorizontal="true">
+        <dc:Bounds x="190" y="1030" width="5740" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_022usp6_di" bpmnElement="Lane_022usp6" isHorizontal="true">
+        <dc:Bounds x="190" y="1200" width="5740" height="610" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0h6oj7z_di" bpmnElement="Lane_0h6oj7z" isHorizontal="true">
+        <dc:Bounds x="220" y="1200" width="5710" height="230" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0j7nfm0_di" bpmnElement="Lane_0j7nfm0" isHorizontal="true">
+        <dc:Bounds x="220" y="1430" width="5710" height="380" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1tyqxvx_di" bpmnElement="Lane_1tyqxvx" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="5740" height="520" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0tthq5s_di" bpmnElement="Lane_0tthq5s" isHorizontal="true">
+        <dc:Bounds x="190" y="600" width="5740" height="430" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0s8gbyw_di" bpmnElement="Flow_0s8gbyw">
+        <di:waypoint x="5350" y="800" />
+        <di:waypoint x="5410" y="800" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ikcu6y_di" bpmnElement="Flow_0ikcu6y">
+        <di:waypoint x="5510" y="800" />
+        <di:waypoint x="5642" y="800" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08gq3zn_di" bpmnElement="Flow_08gq3zn">
+        <di:waypoint x="2750" y="360" />
+        <di:waypoint x="2800" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qh6lv5_di" bpmnElement="Flow_0qh6lv5">
+        <di:waypoint x="2680" y="1505" />
+        <di:waypoint x="2680" y="1330" />
+        <di:waypoint x="2550" y="1330" />
+        <di:waypoint x="2550" y="400" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2692" y="1473" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1f3hurq_di" bpmnElement="Flow_1f3hurq">
+        <di:waypoint x="2330" y="798" />
+        <di:waypoint x="2330" y="1510" />
+        <di:waypoint x="2460" y="1510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1l3an9x_di" bpmnElement="Flow_1l3an9x">
+        <di:waypoint x="2560" y="1530" />
+        <di:waypoint x="2655" y="1530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_134i5w3_di" bpmnElement="Flow_134i5w3">
+        <di:waypoint x="3010" y="540" />
+        <di:waypoint x="3010" y="1780" />
+        <di:waypoint x="1890" y="1780" />
+        <di:waypoint x="1890" y="1678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1abcp4e_di" bpmnElement="Flow_1abcp4e">
+        <di:waypoint x="2680" y="1555" />
+        <di:waypoint x="2680" y="1740" />
+        <di:waypoint x="1890" y="1740" />
+        <di:waypoint x="1890" y="1678" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2681" y="1592" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hsjq5e_di" bpmnElement="Flow_0hsjq5e">
+        <di:waypoint x="2160" y="798" />
+        <di:waypoint x="2160" y="1530" />
+        <di:waypoint x="2460" y="1530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1u2fqn3_di" bpmnElement="Flow_1u2fqn3">
+        <di:waypoint x="785" y="510" />
+        <di:waypoint x="760" y="510" />
+        <di:waypoint x="760" y="1660" />
+        <di:waypoint x="1872" y="1660" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0laxc4c_di" bpmnElement="Flow_0laxc4c">
+        <di:waypoint x="810" y="485" />
+        <di:waypoint x="810" y="400" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="717" y="440" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_106h9ph_di" bpmnElement="Flow_106h9ph">
+        <di:waypoint x="378" y="360" />
+        <di:waypoint x="445" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0veesb2_di" bpmnElement="Flow_0veesb2">
+        <di:waypoint x="588" y="360" />
+        <di:waypoint x="630" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_198cgst_di" bpmnElement="Flow_198cgst">
+        <di:waypoint x="4200" y="490" />
+        <di:waypoint x="4250" y="490" />
+        <di:waypoint x="4250" y="407" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1k0012p_di" bpmnElement="Flow_1k0012p">
+        <di:waypoint x="1420" y="567" />
+        <di:waypoint x="1420" y="1530" />
+        <di:waypoint x="1890" y="1530" />
+        <di:waypoint x="1890" y="1640" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1625" y="1512" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1l9ulyn_di" bpmnElement="Flow_1l9ulyn">
+        <di:waypoint x="5120" y="1125" />
+        <di:waypoint x="5120" y="1550" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5132" y="1153" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07n8aps_di" bpmnElement="Flow_07n8aps">
+        <di:waypoint x="5120" y="1075" />
+        <di:waypoint x="5120" y="800" />
+        <di:waypoint x="5250" y="800" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5131" y="1043" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0i73ire_di" bpmnElement="Flow_0i73ire">
+        <di:waypoint x="495" y="360" />
+        <di:waypoint x="552" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1l5w82g_di" bpmnElement="Flow_1l5w82g">
+        <di:waypoint x="2600" y="360" />
+        <di:waypoint x="2650" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19a750f_di" bpmnElement="Flow_19a750f">
+        <di:waypoint x="1445" y="360" />
+        <di:waypoint x="1520" y="360" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1474" y="342" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rmcprf_di" bpmnElement="Flow_1rmcprf">
+        <di:waypoint x="730" y="360" />
+        <di:waypoint x="760" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1b8izp7_di" bpmnElement="Flow_1b8izp7">
+        <di:waypoint x="4695" y="367" />
+        <di:waypoint x="4840" y="367" />
+        <di:waypoint x="4840" y="1060" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1sn5kv9_di" bpmnElement="Flow_1sn5kv9">
+        <di:waypoint x="4890" y="1100" />
+        <di:waypoint x="5095" y="1100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0z67zcd_di" bpmnElement="Flow_0z67zcd">
+        <di:waypoint x="5120" y="1630" />
+        <di:waypoint x="5120" y="1670" />
+        <di:waypoint x="4840" y="1670" />
+        <di:waypoint x="4840" y="1140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0346nu0_di" bpmnElement="Flow_0346nu0">
+        <di:waypoint x="3010" y="392" />
+        <di:waypoint x="3010" y="460" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3021" y="429" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0t5i8r2_di" bpmnElement="Flow_0t5i8r2">
+        <di:waypoint x="4600" y="367" />
+        <di:waypoint x="4645" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pwsx0d_di" bpmnElement="Flow_0pwsx0d">
+        <di:waypoint x="4450" y="367" />
+        <di:waypoint x="4500" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0z46kqz_di" bpmnElement="Flow_0z46kqz">
+        <di:waypoint x="4300" y="367" />
+        <di:waypoint x="4350" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wcuoxa_di" bpmnElement="Flow_1wcuoxa">
+        <di:waypoint x="4110" y="367" />
+        <di:waypoint x="4200" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pkgzge_di" bpmnElement="Flow_1pkgzge">
+        <di:waypoint x="4060" y="490" />
+        <di:waypoint x="4100" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_157pa4c_di" bpmnElement="Flow_157pa4c">
+        <di:waypoint x="3900" y="392" />
+        <di:waypoint x="3900" y="490" />
+        <di:waypoint x="3960" y="490" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3908" y="416" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0blvsk0_di" bpmnElement="Flow_0blvsk0">
+        <di:waypoint x="3925" y="367" />
+        <di:waypoint x="4010" y="367" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3959" y="349" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0863p2k_di" bpmnElement="Flow_0863p2k">
+        <di:waypoint x="3810" y="367" />
+        <di:waypoint x="3875" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0o6yjx3_di" bpmnElement="Flow_0o6yjx3">
+        <di:waypoint x="3630" y="367" />
+        <di:waypoint x="3710" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1n458lk_di" bpmnElement="Flow_1n458lk">
+        <di:waypoint x="2900" y="367" />
+        <di:waypoint x="2985" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0y29wqx_di" bpmnElement="Flow_0y29wqx">
+        <di:waypoint x="3450" y="740" />
+        <di:waypoint x="3490" y="740" />
+        <di:waypoint x="3490" y="367" />
+        <di:waypoint x="3530" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0r0hry4_di" bpmnElement="Flow_0r0hry4">
+        <di:waypoint x="3260" y="367" />
+        <di:waypoint x="3300" y="367" />
+        <di:waypoint x="3300" y="740" />
+        <di:waypoint x="3350" y="740" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jhzvln_di" bpmnElement="Flow_1jhzvln">
+        <di:waypoint x="3035" y="367" />
+        <di:waypoint x="3160" y="367" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3052" y="349" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17sn8nk_di" bpmnElement="Flow_17sn8nk">
+        <di:waypoint x="1420" y="385" />
+        <di:waypoint x="1420" y="487" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1432" y="418" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1p3dha4_di" bpmnElement="Flow_1p3dha4">
+        <di:waypoint x="2210" y="1660" />
+        <di:waypoint x="4670" y="1660" />
+        <di:waypoint x="4670" y="392" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00crytw_di" bpmnElement="Flow_00crytw">
+        <di:waypoint x="470" y="385" />
+        <di:waypoint x="470" y="1660" />
+        <di:waypoint x="1872" y="1660" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ur7cej_di" bpmnElement="Flow_1ur7cej">
+        <di:waypoint x="1908" y="1660" />
+        <di:waypoint x="2110" y="1660" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0iuslsx_di" bpmnElement="Flow_0iuslsx">
+        <di:waypoint x="2230" y="740" />
+        <di:waypoint x="2300" y="740" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1u7uwtt_di" bpmnElement="Flow_1u7uwtt">
+        <di:waypoint x="1800" y="740" />
+        <di:waypoint x="1830" y="740" />
+        <di:waypoint x="1830" y="360" />
+        <di:waypoint x="1890" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bt9co0_di" bpmnElement="Flow_1bt9co0">
+        <di:waypoint x="1620" y="360" />
+        <di:waypoint x="1660" y="360" />
+        <di:waypoint x="1660" y="740" />
+        <di:waypoint x="1700" y="740" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hrv2nc_di" bpmnElement="Flow_0hrv2nc">
+        <di:waypoint x="1310" y="740" />
+        <di:waypoint x="1350" y="740" />
+        <di:waypoint x="1350" y="360" />
+        <di:waypoint x="1395" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04tb2d6_di" bpmnElement="Flow_04tb2d6">
+        <di:waypoint x="1130" y="360" />
+        <di:waypoint x="1170" y="360" />
+        <di:waypoint x="1170" y="740" />
+        <di:waypoint x="1210" y="740" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11qd6iw_di" bpmnElement="Flow_11qd6iw">
+        <di:waypoint x="950" y="740" />
+        <di:waypoint x="975" y="740" />
+        <di:waypoint x="975" y="360" />
+        <di:waypoint x="1030" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pioe6h_di" bpmnElement="Flow_1pioe6h">
+        <di:waypoint x="880" y="798" />
+        <di:waypoint x="880" y="820" />
+        <di:waypoint x="810" y="820" />
+        <di:waypoint x="810" y="535" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rbep4c_di" bpmnElement="Flow_0rbep4c">
+        <di:waypoint x="860" y="360" />
+        <di:waypoint x="900" y="360" />
+        <di:waypoint x="900" y="700" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_123u8re_di" bpmnElement="Flow_123u8re">
+        <di:waypoint x="278" y="360" />
+        <di:waypoint x="342" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1aajd83_di" bpmnElement="Flow_1aajd83">
+        <di:waypoint x="1990" y="360" />
+        <di:waypoint x="2080" y="360" />
+        <di:waypoint x="2080" y="740" />
+        <di:waypoint x="2130" y="740" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nuyh7u_di" bpmnElement="Flow_0nuyh7u">
+        <di:waypoint x="2400" y="740" />
+        <di:waypoint x="2450" y="740" />
+        <di:waypoint x="2450" y="360" />
+        <di:waypoint x="2500" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0s69zj2_di" bpmnElement="COB_SRV_FSKScreening">
+        <dc:Bounds x="2300" y="700" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1re4pnc_di" bpmnElement="COB_SRV_Sanctions">
+        <dc:Bounds x="2130" y="700" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09uvayb_di" bpmnElement="COB_ACT_CaptureCustomerDetails">
+        <dc:Bounds x="2500" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0pro713_di" bpmnElement="COB_EVT_CustomerOnboardingStart">
+        <dc:Bounds x="242" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="249" y="385" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0jcweir_di" bpmnElement="COB_GTW_Clearance" isMarkerVisible="true">
+        <dc:Bounds x="5095" y="1075" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5155" y="1093" width="57" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1l80qod_di" bpmnElement="COB_ACT_CaptureLivelinessStatus">
+        <dc:Bounds x="1890" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1kmmr7v_di" bpmnElement="COB_GTW_NFCPass" isMarkerVisible="true">
+        <dc:Bounds x="1395" y="335" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1391" y="311" width="57" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1a68o2h_di" bpmnElement="COB_TSK_LivelinessCheck">
+        <dc:Bounds x="1520" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1py3xbj_di" bpmnElement="COB_TSK_EIDNFC">
+        <dc:Bounds x="1030" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_019h1pw_di" bpmnElement="COB_GTW_Gateway" isMarkerVisible="true">
+        <dc:Bounds x="4645" y="342" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1nhnvdi_di" bpmnElement="COB_SRV_DocumentSaveinDMS">
+        <dc:Bounds x="4350" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1s64b3e_di" bpmnElement="COB_TSK_MortgageContractLoanAgreementSitePlan">
+        <dc:Bounds x="4200" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ils9pv_di" bpmnElement="COB_TSK_FABSalarySIOForm">
+        <dc:Bounds x="4010" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0308eda_di" bpmnElement="COB_GTW_FabAccount" isMarkerVisible="true">
+        <dc:Bounds x="3875" y="342" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3865" y="312" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1v43h8u_di" bpmnElement="COB_TSK_CaptureBankDetails">
+        <dc:Bounds x="3710" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ca0zo2_di" bpmnElement="COB_SNDTSK_StartAccountRegistration">
+        <dc:Bounds x="3530" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_109ndsj_di" bpmnElement="COB_SUB_AccountActivationWorkflow">
+        <dc:Bounds x="3350" y="700" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1kru0da_di" bpmnElement="COB_SRV_LivelinessVerify">
+        <dc:Bounds x="1700" y="700" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0tazplz_di" bpmnElement="COB_SRV_NFCVerify">
+        <dc:Bounds x="1210" y="700" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1c76hge_di" bpmnElement="COB_SRV_OCRScanVerify">
+        <dc:Bounds x="850" y="700" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yi3lyy_di" bpmnElement="COB_ACT_CongratulationsScreen">
+        <dc:Bounds x="4500" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0sxbu13_di" bpmnElement="COB_ACT_ContactBranch">
+        <dc:Bounds x="1370" y="487" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zfkdqt_di" bpmnElement="COB_TSK_VerifyCustomerDetails">
+        <dc:Bounds x="4790" y="1060" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_047wf3l_di" bpmnElement="COB_TSK_UpdateMissingDetails">
+        <dc:Bounds x="5070" y="1550" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0pnr1uz_di" bpmnElement="COB_EVT_WaitingToTriggerByBranch">
+        <dc:Bounds x="1872" y="1642" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1848" y="1685" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06gbzv6_di" bpmnElement="COB_TSK_NonFABSalaryDDAForm">
+        <dc:Bounds x="3960" y="450" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1m0e0sv_di" bpmnElement="COB_ACT_DDAFormSent">
+        <dc:Bounds x="4100" y="450" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1xut6z8_di" bpmnElement="COB_TSK_EIDOCRScan">
+        <dc:Bounds x="760" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1i0jvjd_di" bpmnElement="COB_SRV_NewDeviceReg">
+        <dc:Bounds x="630" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_15t8ljq_di" bpmnElement="COB_EVT_WaitingDeviceReg">
+        <dc:Bounds x="552" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="526" y="385" width="89" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_195l9lx_di" bpmnElement="COB_EVT_SendSMS">
+        <dc:Bounds x="342" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="334" y="385" width="53" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0qv8fs0_di" bpmnElement="COB_GTW_ParallelGateway">
+        <dc:Bounds x="445" y="335" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_04odvvd_di" bpmnElement="COB_GTW_RetryCount" isMarkerVisible="true">
+        <dc:Bounds x="785" y="485" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="828" y="473" width="65" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0j9uzgt_di" bpmnElement="COB_GTW_TrueHit" isMarkerVisible="true">
+        <dc:Bounds x="2655" y="1505" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2716" y="1523" width="57" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0hle9ve_di" bpmnElement="COB_SUB_EKYCFailure">
+        <dc:Bounds x="2460" y="1490" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1o84yz3_di" bpmnElement="COB_SUB_RegistrationByBranch">
+        <dc:Bounds x="2110" y="1620" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1vj5mwj_di" bpmnElement="COB_TSK_CongratulationsScreen">
+        <dc:Bounds x="3160" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0kyzarb_di" bpmnElement="COB_GTW_Exceptions" isMarkerVisible="true">
+        <dc:Bounds x="2985" y="342" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2981" y="312" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_15w94ek_di" bpmnElement="COB_SNDTSK_SMSSentForFailure">
+        <dc:Bounds x="2960" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19ycnsv_di" bpmnElement="COB_SRV_T24AccountOpening">
+        <dc:Bounds x="2800" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0cuzgpz_di" bpmnElement="Activity_0cuzgpz">
+        <dc:Bounds x="2650" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_02my167_di" bpmnElement="COB_EVT_JourneyCompletedEnd">
+        <dc:Bounds x="5642" y="782" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5633" y="825" width="54" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0nlcr6t_di" bpmnElement="COB_SUB_AramexCourier">
+        <dc:Bounds x="5410" y="760" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0v7zqtc_di" bpmnElement="COB_SRV_T24AccActivationCompleted">
+        <dc:Bounds x="5250" y="760" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_03lnkoi_di" bpmnElement="TextAnnotation_03lnkoi">
+        <dc:Bounds x="3010" y="210" width="100" height="67" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0glop4h_di" bpmnElement="TextAnnotation_0glop4h">
+        <dc:Bounds x="2520" y="160" width="180" height="113" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_02ezatn_di" bpmnElement="TextAnnotation_02ezatn">
+        <dc:Bounds x="2350" y="1440" width="100" height="41" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_17pdc1s_di" bpmnElement="TextAnnotation_17pdc1s">
+        <dc:Bounds x="5260" y="476" width="100" height="67" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_08ghkv8_di" bpmnElement="TextAnnotation_08ghkv8">
+        <dc:Bounds x="5380" y="930" width="100" height="53" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1ay4xgd_di" bpmnElement="TextAnnotation_1ay4xgd">
+        <dc:Bounds x="5540" y="650" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0qpm7vg_di" bpmnElement="Event_0rr2d7y">
+        <dc:Bounds x="862" y="762" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0jzfrg8_di" bpmnElement="Event_01gslq6">
+        <dc:Bounds x="2142" y="762" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0qx172m_di" bpmnElement="Event_1e55ldb">
+        <dc:Bounds x="2312" y="762" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_18vm2st_di" bpmnElement="Association_18vm2st">
+        <di:waypoint x="2461" y="1497" />
+        <di:waypoint x="2439" y="1481" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0kepdw1_di" bpmnElement="Association_0kepdw1">
+        <di:waypoint x="3015" y="347" />
+        <di:waypoint x="3032" y="277" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1b34imt_di" bpmnElement="Association_1b34imt">
+        <di:waypoint x="2801" y="328" />
+        <di:waypoint x="2700" y="265" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_02iaz2u_di" bpmnElement="Association_02iaz2u">
+        <di:waypoint x="5500" y="760" />
+        <di:waypoint x="5550" y="710" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0bl28xh_di" bpmnElement="Association_0bl28xh">
+        <di:waypoint x="5334" y="840" />
+        <di:waypoint x="5411" y="930" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1400xav_di" bpmnElement="Association_1400xav">
+        <di:waypoint x="5302" y="760" />
+        <di:waypoint x="5315" y="543" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
+
+
