@@ -1,0 +1,10 @@
+POST - /adhafileupload/api/v1/record-approval
+
+
+
+request: (payload)
+{
+applicationNumber :
+status : Approve/reject
+comments :
+}
