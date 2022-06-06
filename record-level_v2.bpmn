@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0j6zotu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:message id="Message_0hn9vzi" name="record_received_rpa" />
+  <bpmn:message id="Message_0kelbhd" name="sms_sent_customer" />
+  <bpmn:message id="Message_1kh5xe0" name="record_sent_rpa" />
+  <bpmn:collaboration id="Collaboration_069wvuw">
+    <bpmn:participant id="ADH_ApplicationLevelWorkflow" name="ADHA Application Level Workflow" processRef="record-level" />
+  </bpmn:collaboration>
+  <bpmn:process id="record-level" name="ADHA Application Level Workflow" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_17m4qtt">
+      <bpmn:lane id="Lane_08qfdgj" name="CAD Maker">
+        <bpmn:flowNodeRef>Activity_1oos6v0</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ADH_GTW_CADMakerApprove</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ADH_TSK_ApproveRejectCADMaker</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1k7i199</bpmn:flowNodeRef>
+        <bpmn:childLaneSet id="LaneSet_0j8eam7" />
+      </bpmn:lane>
+      <bpmn:lane id="Lane_1amfah7" name="CAD Checker">
+        <bpmn:flowNodeRef>ADH_GTW_CADCheckerApprove</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0kwrmry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ADH_Task_ApproveRejectCADChecker</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_0ay5ypc" name="MIS Team">
+        <bpmn:flowNodeRef>ADH_TSK_UpdateApplication</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1ucfxpu</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_0dqpytx">
+        <bpmn:flowNodeRef>ADH_SRV_ReceiveLoanApplication</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ADH_EVT_RecordLevelStart</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0wnsvs9</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ADH_GTW_IncorrectApplication</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0fd0qzk</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0h3xtrl</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ADH_EVT_RecordLevelEnd</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1pmdvna</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:userTask id="ADH_TSK_UpdateApplication" name="Update Application">
+      <bpmn:incoming>Flow_0i37iqz</bpmn:incoming>
+      <bpmn:incoming>Flow_1r8d8rp</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wuqsz8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:task id="Activity_1oos6v0" name="Incorrect application updated">
+      <bpmn:incoming>Flow_0wuqsz8</bpmn:incoming>
+      <bpmn:outgoing>Flow_1yk7ypp</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="ADH_GTW_CADMakerApprove" name="Approved?" default="Flow_1qy163t">
+      <bpmn:incoming>Flow_1a2ev8r</bpmn:incoming>
+      <bpmn:outgoing>Flow_17slyaq</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1qy163t</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="ADH_TSK_ApproveRejectCADMaker" name="Edit &#38; Approve/ Reject Application">
+      <bpmn:incoming>Flow_1yk7ypp</bpmn:incoming>
+      <bpmn:incoming>Flow_0nwrfi8</bpmn:incoming>
+      <bpmn:incoming>Flow_08u5aq1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1a2ev8r</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="ADH_GTW_CADCheckerApprove" name="Approved??" default="Flow_1cysaon">
+      <bpmn:incoming>Flow_0apmgbu</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ma2i4z</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1cysaon</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Activity_1k7i199" name="Application Rejected">
+      <bpmn:incoming>Flow_1cysaon</bpmn:incoming>
+      <bpmn:outgoing>Flow_08u5aq1</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Activity_0kwrmry" name="Application approved/updated">
+      <bpmn:incoming>Flow_17slyaq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0lloaz4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:serviceTask id="ADH_SRV_ReceiveLoanApplication" name="Receive loan application" camunda:delegateExpression="${passLoanIdService}">
+      <bpmn:incoming>Flow_1ofovul</bpmn:incoming>
+      <bpmn:outgoing>Flow_16s8002</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="ADH_EVT_RecordLevelStart">
+      <bpmn:outgoing>Flow_1ofovul</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Activity_1ucfxpu" name="Application Rejected">
+      <bpmn:incoming>Flow_1qy163t</bpmn:incoming>
+      <bpmn:outgoing>Flow_1r8d8rp</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Activity_0wnsvs9" name="Application approved">
+      <bpmn:incoming>Flow_0ma2i4z</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ly18ba</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="ADH_GTW_IncorrectApplication" name="Incorrect Application?" default="Flow_0nwrfi8">
+      <bpmn:incoming>Flow_16s8002</bpmn:incoming>
+      <bpmn:outgoing>Flow_0i37iqz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0nwrfi8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="ADH_Task_ApproveRejectCADChecker" name="Reject/Approve application">
+      <bpmn:incoming>Flow_0lloaz4</bpmn:incoming>
+      <bpmn:outgoing>Flow_0apmgbu</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_0fd0qzk" name="Start Customer Onboarding" camunda:delegateExpression="${startCustomerOnboarding}">
+      <bpmn:incoming>Flow_0ly18ba</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ldzhpt</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_0h3xtrl" name="Start Customer Onboarding Manually">
+      <bpmn:incoming>Flow_09y2jct</bpmn:incoming>
+      <bpmn:outgoing>Flow_0hz6lvc</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="ADH_EVT_RecordLevelEnd" name="End">
+      <bpmn:incoming>Flow_1ldzhpt</bpmn:incoming>
+      <bpmn:incoming>Flow_0hz6lvc</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_0i8u1c7" />
+    </bpmn:endEvent>
+    <bpmn:boundaryEvent id="Event_1pmdvna" attachedToRef="Activity_0fd0qzk">
+      <bpmn:outgoing>Flow_09y2jct</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1b9qt38" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1r8d8rp" sourceRef="Activity_1ucfxpu" targetRef="ADH_TSK_UpdateApplication" />
+    <bpmn:sequenceFlow id="Flow_1qy163t" name="No" sourceRef="ADH_GTW_CADMakerApprove" targetRef="Activity_1ucfxpu" />
+    <bpmn:sequenceFlow id="Flow_08u5aq1" sourceRef="Activity_1k7i199" targetRef="ADH_TSK_ApproveRejectCADMaker" />
+    <bpmn:sequenceFlow id="Flow_0ly18ba" sourceRef="Activity_0wnsvs9" targetRef="Activity_0fd0qzk" />
+    <bpmn:sequenceFlow id="Flow_17slyaq" name="Yes" sourceRef="ADH_GTW_CADMakerApprove" targetRef="Activity_0kwrmry">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{recordApprovedByCADMaker==true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1cysaon" name="No" sourceRef="ADH_GTW_CADCheckerApprove" targetRef="Activity_1k7i199" />
+    <bpmn:sequenceFlow id="Flow_0apmgbu" name="pass status" sourceRef="ADH_Task_ApproveRejectCADChecker" targetRef="ADH_GTW_CADCheckerApprove" />
+    <bpmn:sequenceFlow id="Flow_0lloaz4" sourceRef="Activity_0kwrmry" targetRef="ADH_Task_ApproveRejectCADChecker" />
+    <bpmn:sequenceFlow id="Flow_1yk7ypp" sourceRef="Activity_1oos6v0" targetRef="ADH_TSK_ApproveRejectCADMaker" />
+    <bpmn:sequenceFlow id="Flow_1ofovul" sourceRef="ADH_EVT_RecordLevelStart" targetRef="ADH_SRV_ReceiveLoanApplication" />
+    <bpmn:sequenceFlow id="Flow_16s8002" name="pass application identifier parameter" sourceRef="ADH_SRV_ReceiveLoanApplication" targetRef="ADH_GTW_IncorrectApplication" />
+    <bpmn:sequenceFlow id="Flow_0i37iqz" name="Yes" sourceRef="ADH_GTW_IncorrectApplication" targetRef="ADH_TSK_UpdateApplication">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{incorrectRecord==true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0nwrfi8" name="No" sourceRef="ADH_GTW_IncorrectApplication" targetRef="ADH_TSK_ApproveRejectCADMaker" />
+    <bpmn:sequenceFlow id="Flow_0wuqsz8" sourceRef="ADH_TSK_UpdateApplication" targetRef="Activity_1oos6v0" />
+    <bpmn:sequenceFlow id="Flow_0ma2i4z" name="Yes" sourceRef="ADH_GTW_CADCheckerApprove" targetRef="Activity_0wnsvs9">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{recordApprovedByCADChecker==true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1a2ev8r" sourceRef="ADH_TSK_ApproveRejectCADMaker" targetRef="ADH_GTW_CADMakerApprove" />
+    <bpmn:sequenceFlow id="Flow_1ldzhpt" sourceRef="Activity_0fd0qzk" targetRef="ADH_EVT_RecordLevelEnd" />
+    <bpmn:sequenceFlow id="Flow_09y2jct" sourceRef="Event_1pmdvna" targetRef="Activity_0h3xtrl" />
+    <bpmn:sequenceFlow id="Flow_0hz6lvc" sourceRef="Activity_0h3xtrl" targetRef="ADH_EVT_RecordLevelEnd" />
+    <bpmn:textAnnotation id="TextAnnotation_15iam4w">
+      <bpmn:text>An email notiification will be sent to CAD Checker</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_1k33ht7">
+      <bpmn:text>An email notification will be sent to MIS Team</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_06opb6y">
+      <bpmn:text>Application ready for SMS batch</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_141orj8">
+      <bpmn:text>An email notification  will be sent to CAD maker hourly(configurable)</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_1iqmasj">
+      <bpmn:text>An email notification will be sent to CAD maker</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_01divvq" sourceRef="Activity_0kwrmry" targetRef="TextAnnotation_15iam4w" />
+    <bpmn:association id="Association_1uffwjt" sourceRef="Activity_1ucfxpu" targetRef="TextAnnotation_1k33ht7" />
+    <bpmn:association id="Association_0ktwe3b" sourceRef="Activity_0wnsvs9" targetRef="TextAnnotation_06opb6y" />
+    <bpmn:association id="Association_003497q" sourceRef="Activity_1oos6v0" targetRef="TextAnnotation_141orj8" />
+    <bpmn:association id="Association_0t6xtxi" sourceRef="Activity_1k7i199" targetRef="TextAnnotation_1iqmasj" />
+  </bpmn:process>
+  <bpmn:message id="Message_1dmaw3h" name="initiateCustomerOnboardingEvent" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_069wvuw">
+      <bpmndi:BPMNShape id="Participant_003q9zr_di" bpmnElement="ADH_ApplicationLevelWorkflow" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="2150" height="1170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_08qfdgj_di" bpmnElement="Lane_08qfdgj" isHorizontal="true">
+        <dc:Bounds x="190" y="546" width="2120" height="314" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1amfah7_di" bpmnElement="Lane_1amfah7" isHorizontal="true">
+        <dc:Bounds x="190" y="860" width="2120" height="390" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0ay5ypc_di" bpmnElement="Lane_0ay5ypc" isHorizontal="true">
+        <dc:Bounds x="190" y="360" width="2120" height="186" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0dqpytx_di" bpmnElement="Lane_0dqpytx" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="2120" height="280" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_15iam4w_di" bpmnElement="TextAnnotation_15iam4w">
+        <dc:Bounds x="1210" y="1010" width="100" height="67" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1k33ht7_di" bpmnElement="TextAnnotation_1k33ht7">
+        <dc:Bounds x="1320" y="445" width="100" height="67" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_06opb6y_di" bpmnElement="TextAnnotation_06opb6y">
+        <dc:Bounds x="1560" y="252" width="100" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_141orj8_di" bpmnElement="TextAnnotation_141orj8">
+        <dc:Bounds x="580" y="620" width="120" height="95" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1iqmasj_di" bpmnElement="TextAnnotation_1iqmasj">
+        <dc:Bounds x="810" y="780" width="100" height="67" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1r8d8rp_di" bpmnElement="Flow_1r8d8rp">
+        <di:waypoint x="1210" y="420" />
+        <di:waypoint x="1210" y="380" />
+        <di:waypoint x="730" y="380" />
+        <di:waypoint x="730" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qy163t_di" bpmnElement="Flow_1qy163t">
+        <di:waypoint x="1210" y="629" />
+        <di:waypoint x="1210" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1218" y="599" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08u5aq1_di" bpmnElement="Flow_08u5aq1">
+        <di:waypoint x="1040" y="760" />
+        <di:waypoint x="1040" y="694" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ly18ba_di" bpmnElement="Flow_0ly18ba">
+        <di:waypoint x="1840" y="280" />
+        <di:waypoint x="1860" y="280" />
+        <di:waypoint x="1860" y="140" />
+        <di:waypoint x="2010" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17slyaq_di" bpmnElement="Flow_17slyaq">
+        <di:waypoint x="1235" y="654" />
+        <di:waypoint x="1300" y="654" />
+        <di:waypoint x="1300" y="980" />
+        <di:waypoint x="1370" y="980" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1261" y="663" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cysaon_di" bpmnElement="Flow_1cysaon">
+        <di:waypoint x="1790" y="1005" />
+        <di:waypoint x="1790" y="1110" />
+        <di:waypoint x="1040" y="1110" />
+        <di:waypoint x="1040" y="840" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1802" y="1033" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0apmgbu_di" bpmnElement="Flow_0apmgbu">
+        <di:waypoint x="1650" y="980" />
+        <di:waypoint x="1765" y="980" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1670" y="982" width="57" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lloaz4_di" bpmnElement="Flow_0lloaz4">
+        <di:waypoint x="1470" y="980" />
+        <di:waypoint x="1550" y="980" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yk7ypp_di" bpmnElement="Flow_1yk7ypp">
+        <di:waypoint x="910" y="654" />
+        <di:waypoint x="990" y="654" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ofovul_di" bpmnElement="Flow_1ofovul">
+        <di:waypoint x="258" y="280" />
+        <di:waypoint x="310" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16s8002_di" bpmnElement="Flow_16s8002">
+        <di:waypoint x="410" y="280" />
+        <di:waypoint x="545" y="280" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="430" y="290" width="79" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0i37iqz_di" bpmnElement="Flow_0i37iqz">
+        <di:waypoint x="570" y="305" />
+        <di:waypoint x="570" y="450" />
+        <di:waypoint x="680" y="450" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="581" y="324" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nwrfi8_di" bpmnElement="Flow_0nwrfi8">
+        <di:waypoint x="595" y="280" />
+        <di:waypoint x="1040" y="280" />
+        <di:waypoint x="1040" y="614" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="632" y="263" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wuqsz8_di" bpmnElement="Flow_0wuqsz8">
+        <di:waypoint x="780" y="450" />
+        <di:waypoint x="860" y="450" />
+        <di:waypoint x="860" y="614" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ma2i4z_di" bpmnElement="Flow_0ma2i4z">
+        <di:waypoint x="1790" y="955" />
+        <di:waypoint x="1790" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1801" y="907" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1a2ev8r_di" bpmnElement="Flow_1a2ev8r">
+        <di:waypoint x="1090" y="654" />
+        <di:waypoint x="1185" y="654" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ldzhpt_di" bpmnElement="Flow_1ldzhpt">
+        <di:waypoint x="2110" y="140" />
+        <di:waypoint x="2141" y="140" />
+        <di:waypoint x="2141" y="210" />
+        <di:waypoint x="2212" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09y2jct_di" bpmnElement="Flow_09y2jct">
+        <di:waypoint x="2060" y="198" />
+        <di:waypoint x="2060" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hz6lvc_di" bpmnElement="Flow_0hz6lvc">
+        <di:waypoint x="2110" y="280" />
+        <di:waypoint x="2230" y="280" />
+        <di:waypoint x="2230" y="228" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0pamqwt_di" bpmnElement="ADH_TSK_UpdateApplication">
+        <dc:Bounds x="680" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1oos6v0_di" bpmnElement="Activity_1oos6v0">
+        <dc:Bounds x="810" y="614" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1ipya76_di" bpmnElement="ADH_GTW_CADMakerApprove" isMarkerVisible="true">
+        <dc:Bounds x="1185" y="629" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1183" y="689" width="53" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0c5bkr0_di" bpmnElement="ADH_TSK_ApproveRejectCADMaker">
+        <dc:Bounds x="990" y="614" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_07vboxc_di" bpmnElement="ADH_GTW_CADCheckerApprove" isMarkerVisible="true">
+        <dc:Bounds x="1765" y="955" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1825" y="973" width="59" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1k7i199_di" bpmnElement="Activity_1k7i199">
+        <dc:Bounds x="990" y="760" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kwrmry_di" bpmnElement="Activity_0kwrmry">
+        <dc:Bounds x="1370" y="940" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0j7g6ot_di" bpmnElement="ADH_SRV_ReceiveLoanApplication">
+        <dc:Bounds x="310" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_08gp7rb_di" bpmnElement="ADH_EVT_RecordLevelStart">
+        <dc:Bounds x="222" y="262" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ucfxpu_di" bpmnElement="Activity_1ucfxpu">
+        <dc:Bounds x="1160" y="420" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wnsvs9_di" bpmnElement="Activity_0wnsvs9">
+        <dc:Bounds x="1740" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ytkjq5_di" bpmnElement="ADH_GTW_IncorrectApplication" isMarkerVisible="true">
+        <dc:Bounds x="545" y="255" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="540" y="216" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1dhcifu_di" bpmnElement="ADH_Task_ApproveRejectCADChecker">
+        <dc:Bounds x="1550" y="940" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0nnmcpy_di" bpmnElement="Activity_0fd0qzk">
+        <dc:Bounds x="2010" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16y5ok3_di" bpmnElement="Activity_0h3xtrl">
+        <dc:Bounds x="2010" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1mkd3g7_di" bpmnElement="ADH_EVT_RecordLevelEnd">
+        <dc:Bounds x="2212" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2220" y="168" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_01divvq_di" bpmnElement="Association_01divvq">
+        <di:waypoint x="1370" y="1000" />
+        <di:waypoint x="1310" y="1024" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1uffwjt_di" bpmnElement="Association_1uffwjt">
+        <di:waypoint x="1260" y="460" />
+        <di:waypoint x="1320" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0ktwe3b_di" bpmnElement="Association_0ktwe3b">
+        <di:waypoint x="1740" y="280" />
+        <di:waypoint x="1660" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_003497q_di" bpmnElement="Association_003497q">
+        <di:waypoint x="810" y="654" />
+        <di:waypoint x="700" y="654" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0t6xtxi_di" bpmnElement="Association_0t6xtxi">
+        <di:waypoint x="990" y="799" />
+        <di:waypoint x="910" y="796" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_10ui31h_di" bpmnElement="Event_1pmdvna">
+        <dc:Bounds x="2042" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
