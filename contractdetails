@@ -1,0 +1,28 @@
+screenedRecordStatus : DetailsCaptured (Pending)
+sanctionHit = true
+screeningHit = true
+ispep = true
+
+screenedRecordStatus : Ref. to DOA Authority (Pending)      ****** Completed for CSO (OR condition with NHLOPS)
+sanctionHit = true
+screeningHit = true
+ispep = true
+
+
+screenedRecordStatus : Confirmed From DOA (Completed)
+sanctionHit = true
+screeningHit = true
+ispep = true
+
+********************* NHL OPS***************************
+
+screenedRecordStatus : Ref. to NHL Ops Checker (Pending)   ****** Completed for CSO (OR condition with DOA)
+sanctionHit = true
+screeningHit = true
+ispep = true
+
+
+screenedRecordStatus : Registration completed (Pending)   ****** Completed for CSO (OR condition with DOA)
+sanctionHit = false
+screeningHit = false
+ispep = false
