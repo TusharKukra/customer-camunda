@@ -1,0 +1,27 @@
+Senction hit
+
+"mobileStatus" : 'Senction Hit';
+
+Screening hit
+
+"mobileStatus" : 'Screenin Hit';
+
+PEP person
+
+"mobileStatus" : 'PEP Exposed';
+
+Liveness Failed
+
+"mobileStatus" : 'Liveness Failed';
+
+
+
+Senction,screening hit override reject
+
+"mobileStatus" : 'Account Rejected';
+
+
+
+Senction,screening hit override arrove
+
+"mobileStatus" : "Document verification pending";
